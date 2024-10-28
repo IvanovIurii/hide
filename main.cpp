@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     {
         changePermissions(
             hiddenDirectory,
-            fs::perms::owner_all | fs::perms::group_read | fs::perms::group_write | fs::perms::others_read | fs::perms::others_read);
+            fs::perms::owner_all | fs::perms::group_read | fs::perms::group_write | fs::perms::others_read | fs::perms::others_write);
     }
 
     string path = darkDirectoryPath.append("/").append(fileName);
@@ -59,11 +59,15 @@ bool hasPermissionsToWrite(string directoryName)
 {
     auto permissions = fs::status(directoryName).permissions();
 
-    bool ownerWrite = fs::perms::none == (fs::perms::owner_write & permissions) ? false : true;
-    bool groupWrite = fs::perms::none == (fs::perms::group_write & permissions) ? false : true;
-    bool otherWrite = fs::perms::none == (fs::perms::others_write & permissions) ? false : true;
+    bool ownerAll = fs::perms::none == (fs::perms::owner_all & permissions) ? false : true;
 
-    return ownerWrite && groupWrite && otherWrite;
+    bool groupWrite = fs::perms::none == (fs::perms::group_write & permissions) ? false : true;
+    bool groupRead = fs::perms::none == (fs::perms::group_read & permissions) ? false : true;
+
+    bool otherWrite = fs::perms::none == (fs::perms::others_write & permissions) ? false : true;
+    bool otherRead = fs::perms::none == (fs::perms::others_write & permissions) ? false : true;
+
+    return ownerAll && groupWrite && groupRead && otherWrite && otherRead;
 }
 
 void changePermissions(string directoryName, fs::perms permissions)
