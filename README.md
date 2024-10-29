@@ -20,3 +20,12 @@ g++ -std=c++17 -o hide main.cpp
 ./hide <file_name>
 ```
 
+### Дополнительно
+
+Решил сделать без использования `filesystem` lib.
+Результат в `main2.cpp`.
+
+Запуск:
+```
+g++ -std=c++17 -o hide main2.cpp && ./hide test <file_name>
+```
